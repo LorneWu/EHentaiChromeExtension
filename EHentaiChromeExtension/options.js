@@ -6,6 +6,7 @@ var DEFAULT_INTERMEDIATE_DOWNLOAD_PATH = 'e-hentai helper/';
 var DEFAULT_SAVE_ORIGINAL_IMAGES = false;
 var DEFAULT_SAVE_GALLERY_INFO = false;
 var DEFAULT_SAVE_GALLERY_TAGS = false;
+var DEFAULT_SAVE_IMAGENUM_AS_FILENAME = false;
 var DEFAULT_FILENAME_CONFLICT_ACTION = 'uniquify';
 var DEFAULT_DOWNLOAD_INTERVAL = 300;  // In ms.
 
@@ -14,6 +15,7 @@ var inputIntermediateDownloadPath = null;
 var inputSaveOriginalImages = null;
 var inputSaveMetadataInfo = null;
 var inputSaveMetadataTags = null;
+var inputSaveImageNumAsFilename = null;
 var inputFilenameConflictActionUniquify = null;
 var inputFilenameConflictActionOverwrite = null;
 var inputDownloadInterval = null;
@@ -70,6 +72,7 @@ function restoreOptions() {
     saveOriginalImages:       DEFAULT_SAVE_ORIGINAL_IMAGES,
     saveGalleryInfo:          DEFAULT_SAVE_GALLERY_INFO,
     saveGalleryTags:          DEFAULT_SAVE_GALLERY_TAGS,
+    saveImageNumAsFilename:   DEFAULT_SAVE_IMAGENUM_AS_FILENAME,
     filenameConflictAction:   DEFAULT_FILENAME_CONFLICT_ACTION,
     downloadInterval:         DEFAULT_DOWNLOAD_INTERVAL
   }, function(items) {  // Update UI.
@@ -77,6 +80,7 @@ function restoreOptions() {
     inputSaveOriginalImages.checked = items.saveOriginalImages;
     inputSaveMetadataInfo.checked = items.saveGalleryInfo;
     inputSaveMetadataTags.checked = items.saveGalleryTags;
+    inputSaveImageNumAsFilename.checked = items.saveImageNumAsFilename;
     if (items.filenameConflictAction ==
         inputFilenameConflictActionUniquify.value) {
       inputFilenameConflictActionUniquify.checked = true;
@@ -93,6 +97,7 @@ function saveOptions() {
   var saveOriginalImages = inputSaveOriginalImages.checked;
   var saveGalleryInfo = inputSaveMetadataInfo.checked;
   var saveGalleryTags = inputSaveMetadataTags.checked;
+  var saveImageNumAsFilename = inputSaveImageNumAsFilename.checked;
   var filenameConflictAction = getFilenameConflictAction();
   var downloadInterval = inputDownloadInterval.value;
   intermediateDownloadPath = processFilePath(intermediateDownloadPath);
@@ -108,6 +113,7 @@ function saveOptions() {
     saveOriginalImages:       saveOriginalImages,
     saveGalleryInfo:          saveGalleryInfo,
     saveGalleryTags:          saveGalleryTags,
+    saveImageNumAsFilename:   saveImageNumAsFilename,
     filenameConflictAction:   filenameConflictAction,
     downloadInterval:         downloadInterval
   }, function() {  // Show a feedback message to user.
@@ -121,6 +127,7 @@ document.addEventListener('DOMContentLoaded', function() {
   inputSaveOriginalImages = document.getElementById('saveOriginalImages');
   inputSaveMetadataInfo = document.getElementById('saveMetadataInfo');
   inputSaveMetadataTags = document.getElementById('saveMetadataTags');
+  inputSaveImageNumAsFilename = document.getElementById('saveImageNumAsFilename');
   inputFilenameConflictActionUniquify =
     document.getElementById('filenameConflictActionUniquify');
   inputFilenameConflictActionOverwrite =

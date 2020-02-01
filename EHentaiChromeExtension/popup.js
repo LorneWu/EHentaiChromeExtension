@@ -9,6 +9,7 @@ var DEFAULT_INTERMEDIATE_DOWNLOAD_PATH = 'e-hentai helper/';
 var DEFAULT_SAVE_ORIGINAL_IMAGES = false;
 var DEFAULT_SAVE_GALLERY_INFO = false;
 var DEFAULT_SAVE_GALLERY_TAGS = false;
+var DEFAULT_SAVE_IMAGENUM_AS_FILENAME = false;
 var DEFAULT_FILENAME_CONFLICT_ACTION = 'uniquify';
 var DEFAULT_DOWNLOAD_INTERVAL = 300;  // In ms.
 
@@ -17,6 +18,7 @@ var intermediateDownloadPath = DEFAULT_INTERMEDIATE_DOWNLOAD_PATH;
 var saveOriginalImages = DEFAULT_SAVE_ORIGINAL_IMAGES;
 var saveGalleryInfo = DEFAULT_SAVE_GALLERY_INFO;
 var saveGalleryTags = DEFAULT_SAVE_GALLERY_TAGS;
+var saveImageNumAsFilename = DEFAULT_SAVE_IMAGENUM_AS_FILENAME;
 var filenameConflictAction = DEFAULT_FILENAME_CONFLICT_ACTION;
 var downloadInterval = DEFAULT_DOWNLOAD_INTERVAL;
 
@@ -259,6 +261,7 @@ function generateTxtFile(text) {
 }
 
 // Save to the corresponding folder and rename files.
+var saveImageNumAsFilenameCounter = 0;
 chrome.downloads.onDeterminingFilename.addListener(
     function(downloadItem, suggest) {
       if (downloadItem.byExtensionName == EXTENSION_NAME) {
@@ -270,6 +273,8 @@ chrome.downloads.onDeterminingFilename.addListener(
           var isInfoFile = url.substring(url.indexOf(',') + 1)
                               .startsWith('name');
           filename = isInfoFile ? 'info.txt' : 'tags.txt';
+        }else if (saveImageNumAsFilename) {
+          filename = "pic_" + ('0000' + saveImageNumAsFilenameCounter++).slice(-4) + "." + fileType;
         }
         filename = intermediateDownloadPath + '/' + filename;
         suggest({
@@ -312,6 +317,7 @@ document.addEventListener('DOMContentLoaded', function() {
     saveOriginalImages:       DEFAULT_SAVE_ORIGINAL_IMAGES,
     saveGalleryInfo:          DEFAULT_SAVE_GALLERY_INFO,
     saveGalleryTags:          DEFAULT_SAVE_GALLERY_TAGS,
+    saveImageNumAsFilename:   DEFAULT_SAVE_IMAGENUM_AS_FILENAME,
     filenameConflictAction:   DEFAULT_FILENAME_CONFLICT_ACTION,
     downloadInterval:         DEFAULT_DOWNLOAD_INTERVAL
   }, function(items) {
@@ -319,6 +325,7 @@ document.addEventListener('DOMContentLoaded', function() {
     saveOriginalImages = items.saveOriginalImages;
     saveGalleryInfo = items.saveGalleryInfo;
     saveGalleryTags = items.saveGalleryTags;
+    saveImageNumAsFilename = items.saveImageNumAsFilename;
     filenameConflictAction = items.filenameConflictAction;
     downloadInterval = items.downloadInterval;
 
