@@ -221,21 +221,21 @@ function processImagePage(url,imageIndex) {
         imageUrl = divDownloadOriginal.childNodes[3].href;
       }
     }
-    chrome.downloads.download({url: imageUrl+"@"+imageIndex});
+    chrome.downloads.download({url: imageUrl+"@"+imageIndex}); // add delimiter
   });
 }
 
 function processGalleryPage(url,pageIndex) {
   httpGetAsync(url, function(responseText) {
     var imagePageUrls = extractImagePageUrls(responseText);
-    processImagePage(imagePageUrls[0],pageIndex*40);  // Start immediately.
+    processImagePage(imagePageUrls[0], pageIndex*40 );  // Start immediately.
     var imageIndex = 1;
     var imageInterval = setInterval(function() {
       if(imageIndex == imagePageUrls.length) {
         clearInterval(imageInterval);
         return;
       }
-      processImagePage(imagePageUrls[imageIndex],pageIndex*40+imageIndex);
+      processImagePage(imagePageUrls[imageIndex], pageIndex*40 + imageIndex );
       imageIndex++;
     }, downloadInterval);
   });
@@ -261,13 +261,11 @@ function generateTxtFile(text) {
 }
 
 // Save to the corresponding folder and rename files.
-// var saveImageNumAsFilenameCounter = 0;
 chrome.downloads.onDeterminingFilename.addListener(
     function(downloadItem, suggest) {
       if (downloadItem.byExtensionName == EXTENSION_NAME) {
         var imageIndex = downloadItem.url.substring(downloadItem.url.lastIndexOf('@')+1);
         downloadItem.url = downloadItem.url.substring(0,downloadItem.url.lastIndexOf('@')-1);
-        console.log(imageIndex , downloadItem.url);
         var filename = downloadItem.filename;
         var fileType = filename.substring(filename.lastIndexOf('.') + 1);
         if (fileType == 'txt') {  // Metadata.
@@ -276,7 +274,7 @@ chrome.downloads.onDeterminingFilename.addListener(
           var isInfoFile = url.substring(url.indexOf(',') + 1)
                               .startsWith('name');
           filename = isInfoFile ? 'info.txt' : 'tags.txt';
-        }else if (1/*saveImageNumAsFilename*/) {
+        }else if (saveImageNumAsFilename) {
           filename = "pic_" + ('0000' + imageIndex).slice(-4) + "." + fileType;
         }
         filename = intermediateDownloadPath + '/' + filename;
