@@ -264,8 +264,10 @@ function generateTxtFile(text) {
 chrome.downloads.onDeterminingFilename.addListener(
     function(downloadItem, suggest) {
       if (downloadItem.byExtensionName == EXTENSION_NAME) {
-        var imageIndex = downloadItem.url.substring(downloadItem.url.lastIndexOf('@')+1);
-        downloadItem.url = downloadItem.url.substring(0,downloadItem.url.lastIndexOf('@')-1);
+        if(downloadItem.url.indexOf('@')!=-1){
+          var imageIndex = downloadItem.url.substring(downloadItem.url.lastIndexOf('@')+1);
+          downloadItem.url = downloadItem.url.substring(0,downloadItem.url.lastIndexOf('@'));
+        }
         var filename = downloadItem.filename;
         var fileType = filename.substring(filename.lastIndexOf('.') + 1);
         if (fileType == 'txt') {  // Metadata.
